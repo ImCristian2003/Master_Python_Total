@@ -16,25 +16,190 @@
 
 #imports
 import os
+import shutil
 from pathlib import Path
+import numpy as np #arrays utilities
 
 #save the user access route to recets
 route = Path("C:/PUPy/Recetario Dia 6/Recetas")
 
 #functions
 
-#function to show all recets
-def showRecets():
+#function to save all recets
+def saveAll():
 
-    recetas = {}
+    recetas = []
 
     for recet in Path(route).glob("*/*"):
 
-        recetas['clasificacion'] = recet.parents[0].name
-        recetas['recetas'] = recet.stem
+        recetas.append((recet.parents[0].name, recet.stem))
 
     return recetas
 
+#function to show all recets
+def showAll(recets):
+
+    print("Estas son tus recetas disponibles: \n")
+
+    for count, recet in enumerate(recets):
+
+        print(f"{recets[count][0]} -> {recets[count][1]}")
+
+#function to show only the categories
+def showCategories(categ):
+
+    array = []
+
+    for count, cate in enumerate(categ):
+
+        array.append(categ[count][0])
+
+    return array
+
+#function to show only the recets per category
+def showRecets(rou, categ):
+
+    array = []
+
+    for index, recet in enumerate(Path(rou/categ).glob("*")):
+
+        print(f"{index + 1}: {recet.stem}")
+        array.append(recet)
+
+    return array
+
+#function to validate i
+def validate(i):
+
+    if i == 1: #read a recet
+
+        elec = input(f"Elige una categoría ({', '.join(np.unique(showCategories(saveAll())))}):").capitalize()
+
+        if len(elec) != 0:
+
+            print(f"\nRecetas de {elec}:")
+            recets = showRecets(route, elec)
+            num_rec = int(input("\nDigita el número de la receta que quieres leer: "))
+
+            archivo = open(Path(route/elec/recets[num_rec - 1]))
+            
+            print(archivo.read())
+
+            archivo.close()
+
+        else:
+
+            print("Debes elegir una categoría")
+
+    elif i == 2: #create a new recet with its content
+
+        elec = input(f"Elige una categoría ({', '.join(np.unique(showCategories(saveAll())))}):").capitalize()
+
+        if len(elec) != 0: 
+
+            name = input("Escribe el nombre de la nueva receta: ")
+            cont = input("Ahora el contenido: ")
+
+            archivo = open(Path(route/elec/(name + '.txt')), 'w')
+            archivo.write(cont)
+
+            archivo.close()
+
+            print("¡Nueva receta creada con éxito!")
+
+        else:
+
+            print("Debes elegir una categoría")
+
+    elif i == 3: #create a new category
+
+        elec = input("Digita el nombre de la nueva categoría: ")
+
+        if len(elec) != 0:
+
+            os.makedirs(Path(route/elec), exist_ok=True)
+
+            print("Categoría creada con éxito o ya existente!")
+
+        else:
+
+            print("Debes digitar una categoría")
+
+    elif i == 4: #read a recet
+
+        elec = input(f"Elige una categoría ({', '.join(np.unique(showCategories(saveAll())))}):").capitalize()
+
+        if len(elec) != 0:
+
+            print(f"\nRecetas de {elec}:")
+            recets = showRecets(route, elec)
+            num_rec = int(input("\nDigita el número de la receta que quieres eliminar: "))
+
+            ruta_archivo = Path(route/elec/recets[num_rec - 1])
+
+            ruta_archivo.unlink()
+
+        else:
+
+            print("Debes elegir una categoría")
+
+    elif i == 5: #delete a category
+
+        elec = input(f"Digita el nombre de la categoría a eliminar ({', '.join(np.unique(showCategories(saveAll())))}): ")
+
+        if len(elec) != 0:
+
+            ruta_archivo = Path(route/elec)
+
+            shutil.rmtree(ruta_archivo)
+
+            print("¡Categoría eliminada con éxito!")
+
+        else:
+
+            print("Debes digitar una categoría")
+
+    elif i == 6:
+
+        print("Saliendo...")
+    
+    else:
+
+        print("Elección incorrecta")
 
 
-print(showRecets())
+#function to choose the options
+def chOptions():
+
+    i = 0
+
+    while i != 6:
+
+        i = int(input("""
+            Elige una de estas opciones:
+            1 - Leer receta
+            2 - Crear receta
+            3 - Crear categoría
+            4 - Eliminar receta
+            5 - Eliminar categoría
+            6 - Finalizar programa
+        """))
+
+        validate(i)
+
+#execute functions
+chOptions()
+
+#validate(5)
+
+#print(showRecets(route, "Carnes"))
+
+#print(f"Las categorías disponibles son: {', '.join(np.unique(showCategories(saveAll())))}.")
+
+#showAll(saveAll())
+
+#print(showCategories(saveAll()))
+
+#print(', '.join(np.unique(showCategories(saveAll()))))
+
+#print(saveAll())
