@@ -1,5 +1,5 @@
 #Polimorfismo -> 2 o más objetos son diferentes pero pueden ejecutar un mismo objeto
-#al llamarse igual
+#al este llamarse igual
 
 class Vaca:
 
