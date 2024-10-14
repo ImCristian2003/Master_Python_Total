@@ -31,11 +31,24 @@ class Cliente(Persona):
         self.__balance = balance
 
     #methods
+    def consultarBalance(self):
+        print(f"Tu balance actual es de {self.__balance:,.2f}")
+
     def depositar(self, cantidad):
         
         #validate
         if cantidad > 0:
             self.__balance += cantidad
+        else:
+            print("El monto a depositar no puede ser menor a 0")
+
+    def retirar(self, cantidad):
+        
+        #validate
+        if cantidad < self.__balance and cantidad > 0:
+            self.__balance -= cantidad
+        else:
+            print("El monto a retirar no puede ser mayor al balance o menor a 0")
 
     #specials methods
     def __str__(self):
@@ -43,4 +56,50 @@ class Cliente(Persona):
 
 
 mi_cliente = Cliente("Cristian", "Cardona", "013548363", 10000000)
-print(mi_cliente)
+
+
+#functions to initialize the program
+def validate(elect, cliente):
+
+    if elect == 1:
+
+        balance = int(input("Monto a depositar (sin separadores): "))
+        cliente.depositar(balance)
+
+    elif elect == 2:
+
+        balance = int(input("Monto a retirar (sin separadores): "))
+        cliente.retirar(balance)
+
+    elif elect == 3:
+
+        cliente.consultarBalance()
+
+    elif elect == 4:
+
+        return False
+    
+    else:
+
+        print("Selección no valida")
+
+
+def cajeroAutomatico(client):
+
+    elect = 1
+
+    while elect in range(1, 4):
+
+        elect = int(
+            input(
+            """Elige la acción que deseas realizar: 
+            1. Depositar
+            2. Retirar
+            3. Consultar balance
+            4. Salir """
+            )
+        )
+
+        validate(elect, client)
+
+cajeroAutomatico(mi_cliente)
