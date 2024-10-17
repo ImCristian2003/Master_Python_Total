@@ -20,7 +20,48 @@
 from utilidades import generadores  
 #from utilidades import generadores, decoradores #forma recomendada en caso de pocos módulos
 
+#instances
+cosmetic = generadores.cosmetic_turn()
+pharmacy = generadores.pharmacy_turn()
+perfumery = generadores.perfumery_turn()
 
-cosmetic = generadores.perfumery_turn()
+#functions
+def validation(selection):
 
-print(next(cosmetic))
+    if selection == 1:
+
+        print(next(cosmetic))
+        return 1
+
+    elif selection == 2:
+
+        print(next(pharmacy))
+        return 1
+
+    elif selection == 3:
+
+        print(next(perfumery))
+        return 1
+
+    else:
+
+        return 0
+
+def system():
+
+    while True:
+
+        sel = int(input("""A qué área deseas dirigirte (Digite otro número para salir)
+                        1. Cosméticos
+                        2. Farmacia
+                        3. Perfumería """))
+        
+        if validation(sel) == 0:
+
+            break
+
+        else:
+
+            True
+
+system()

@@ -17,6 +17,7 @@ def perfumery_turn():
 
 
 #generator for the pharmacy area
+@decorate_turn
 def pharmacy_turn():
 
     n = 0
@@ -29,6 +30,7 @@ def pharmacy_turn():
 
 
 #generator for the cosmetic area
+@decorate_turn
 def cosmetic_turn():
 
     n = 0
